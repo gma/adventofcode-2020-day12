@@ -3,16 +3,25 @@ class Journey:
         self.facing = facing
         self.steps = []
 
-    def travel(self, instruction):
-        direction = self._direction(instruction[0])
-        distance = int(instruction[1:])
-        self.steps.append(Step(direction, distance))
+    def move(self, instruction):
+        command, argument = instruction[0], int(instruction[1:])
+        method = {
+            "L": self._turn,
+            "R": self._turn,
+        }.get(command, self._travel)
+        method(command, argument)
 
     @property
     def manhattan_distance(self):
         horizontal = sum([step.horizontal for step in self.steps])
         vertical = sum([step.vertical for step in self.steps])
         return abs(horizontal) + abs(vertical)
+
+    def _turn(self, command, argument):
+        self.facing = Turn(command, argument, self.facing).now_facing
+
+    def _travel(self, command, argument):
+        self.steps.append(Step(self._direction(command), argument))
 
     def _direction(self, letter):
         if letter == "F":
@@ -35,3 +44,19 @@ class Step:
 
     def _distance_along_axis(self, signs):
         return self.distance * signs[self.direction]
+
+
+class Turn:
+    directions = ("N", "W", "S", "E")
+
+    def __init__(self, direction, degrees, initially_facing):
+        self.direction = direction
+        self.degrees = degrees
+        self.initial_index = self.directions.index(initially_facing)
+
+    @property
+    def now_facing(self):
+        signs = {"L": 1, "R": -1}
+        index_offset = signs[self.direction] * (self.degrees // 90)
+        index = (self.initial_index + index_offset) % len(self.directions)
+        return self.directions[index]
