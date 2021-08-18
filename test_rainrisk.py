@@ -50,6 +50,11 @@ class JourneyTest(unittest.TestCase):
         journey.move("R180")
         self.assertEqual("E", journey.facing)
 
+    def test_complete_journey(self):
+        instructions = ("F10", "N3", "F7", "R90", "F11")
+        journey = rainrisk.Journey.from_instructions("E", instructions)
+        self.assertEqual(25, journey.manhattan_distance)
+
 
 class TurnTest(unittest.TestCase):
     def test_turning_left_90_from_south_faces_east(self):

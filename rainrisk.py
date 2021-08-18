@@ -1,4 +1,13 @@
+import sys
+
+
 class Journey:
+    @classmethod
+    def from_instructions(cls, facing, instructions):
+        journey = cls(facing)
+        for instruction in instructions: journey.move(instruction)
+        return journey
+
     def __init__(self, facing):
         self.facing = facing
         self.steps = []
@@ -60,3 +69,10 @@ class Turn:
         index_offset = signs[self.direction] * (self.degrees // 90)
         index = (self.initial_index + index_offset) % len(self.directions)
         return self.directions[index]
+
+
+if __name__ == "__main__":
+    with open(sys.argv[1]) as f:
+        instructions = [line.rstrip() for line in f.readlines()]
+    journey = Journey.from_instructions("E", instructions)
+    print("Manhattan distance: %s" % journey.manhattan_distance)
