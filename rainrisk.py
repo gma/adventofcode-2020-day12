@@ -56,7 +56,7 @@ class Step:
 
 
 class Turn:
-    directions = ("N", "W", "S", "E")
+    directions = ("N", "E", "S", "W")
 
     def __init__(self, direction, degrees, initially_facing):
         self.direction = direction
@@ -72,7 +72,7 @@ class Turn:
         return self.degrees // 90
 
     def _direction_index(self):
-        signs = {"L": 1, "R": -1}
+        signs = {"L": -1, "R": 1}
         index_offset = signs[self.direction] * self.compass_points
         return (self.initial_index + index_offset) % len(self.directions)
 
