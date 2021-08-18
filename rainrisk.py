@@ -14,11 +14,13 @@ class Journey:
 
     def move(self, instruction):
         command, argument = instruction[0], int(instruction[1:])
-        method = {
-            "L": self._turn,
-            "R": self._turn,
-        }.get(command, self._travel)
-        method(command, argument)
+        default = lambda arg: self._travel(command, arg)
+        action = {
+            "L": lambda arg: self._turn(command, arg),
+            "R": lambda arg: self._turn(command, arg),
+            "F": lambda arg: self._travel(self.facing, arg)
+        }.get(command, default)
+        action(argument)
 
     @property
     def manhattan_distance(self):
@@ -30,7 +32,6 @@ class Journey:
         self.facing = Turn(command, argument, self.facing).now_facing
 
     def _travel(self, command, argument):
-        command = self.facing if command == "F" else command
         self.steps.append(Step(command, argument))
 
 
