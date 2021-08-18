@@ -1,15 +1,23 @@
 class Journey:
-    def __init__(self):
+    def __init__(self, facing):
+        self.facing = facing
         self.steps = []
 
     def travel(self, instruction):
-        self.steps.append(Step(instruction[0], int(instruction[1:])))
+        direction = self._direction(instruction[0])
+        distance = int(instruction[1:])
+        self.steps.append(Step(direction, distance))
 
     @property
     def manhattan_distance(self):
         horizontal = sum([step.horizontal for step in self.steps])
         vertical = sum([step.vertical for step in self.steps])
         return abs(horizontal) + abs(vertical)
+
+    def _direction(self, letter):
+        if letter == "F":
+            return self.facing
+        return letter
 
 
 class Step:
