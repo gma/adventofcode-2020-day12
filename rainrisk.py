@@ -30,12 +30,8 @@ class Journey:
         self.facing = Turn(command, argument, self.facing).now_facing
 
     def _travel(self, command, argument):
-        self.steps.append(Step(self._direction(command), argument))
-
-    def _direction(self, letter):
-        if letter == "F":
-            return self.facing
-        return letter
+        command = self.facing if command == "F" else command
+        self.steps.append(Step(command, argument))
 
 
 class Step:
