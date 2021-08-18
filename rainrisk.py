@@ -65,10 +65,16 @@ class Turn:
 
     @property
     def now_facing(self):
+        return self.directions[self._direction_index()]
+
+    @property
+    def compass_points(self):
+        return self.degrees // 90
+
+    def _direction_index(self):
         signs = {"L": 1, "R": -1}
-        index_offset = signs[self.direction] * (self.degrees // 90)
-        index = (self.initial_index + index_offset) % len(self.directions)
-        return self.directions[index]
+        index_offset = signs[self.direction] * self.compass_points
+        return (self.initial_index + index_offset) % len(self.directions)
 
 
 if __name__ == "__main__":
