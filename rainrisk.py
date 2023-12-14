@@ -5,7 +5,8 @@ class Journey:
     @classmethod
     def from_instructions(cls, facing, instructions):
         journey = cls(facing)
-        for instruction in instructions: journey.move(instruction)
+        for instruction in instructions:
+            journey.move(instruction)
         return journey
 
     def __init__(self, facing):
@@ -14,7 +15,8 @@ class Journey:
 
     def move(self, instruction):
         command, argument = instruction[0], int(instruction[1:])
-        default = lambda arg: self._travel(command, arg)
+        def default(arg):
+            self._travel(command, arg)
         action = {
             "L": lambda arg: self._turn(command, arg),
             "R": lambda arg: self._turn(command, arg),
